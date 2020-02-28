@@ -17,10 +17,10 @@ function _useQuery<TData, TVars>({ query, variables, cachePolicy }: QueryComposi
     throw new Error('Cannot detect villus Client, did you forget to call `useClient`?');
   }
 
-  const data: Ref<TData | null> = ref(null);
+  const data = ref<TData | null>(null);
   const fetching = ref(false);
   const done = ref(false);
-  const error: Ref<CombinedError | null> = ref(null);
+  const error = ref<CombinedError | null>(null);
 
   async function execute(overrideOpts: { cachePolicy?: CachePolicy } = {}) {
     fetching.value = true;
@@ -38,11 +38,11 @@ function _useQuery<TData, TVars>({ query, variables, cachePolicy }: QueryComposi
   }
 
   if (isRef(query)) {
-    watch(query, () => execute(), { lazy: true });
+    watch(query, () => execute());
   }
 
   let unwatch: ReturnType<typeof watch>;
-  const paused = ref(false);
+  const paused: Ref<boolean> = ref(false);
 
   function watchVars() {
     let oldCache: number;
@@ -63,7 +63,7 @@ function _useQuery<TData, TVars>({ query, variables, cachePolicy }: QueryComposi
         oldCache = id;
         execute();
       },
-      { deep: true, lazy: true }
+      { deep: true }
     );
   }
 
